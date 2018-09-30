@@ -1,0 +1,65 @@
+{
+    "idUtente":{
+        "type": "String",
+        "required": [true, "idUtente field is required"]
+    },
+    "codiceCliente":{
+        "type": "String",
+        "required": [true, "codiceCliente field is required"]
+    },
+    "email":{
+        "type": "String",
+        "default": false,
+        "required": [true, "email field is required"]
+    },
+    "nome":{
+        "type": "String",
+        "default": false,
+        "required": [true, "nome field is required"]
+    },
+    "cognome":{
+        "type": "String",
+        "default": false,
+        "required": [true, "cognome field is required"]
+    },
+    "dataNascita": {
+        "type": "String",
+        "default": false,
+        "required": [true, "dataNascita field is required"]
+    },
+    "codiceFiscale":{
+        "type": "String",
+        "default": false,
+        "required": [true, "codiceFiscale field is required"]
+    },
+    "stato":{
+        "type": "String",
+        "default": false,
+        "required": [true, "stato field is required"]
+    },
+    "attivo":{
+        "type": "String",
+        "default": false,
+        "required": [true, "attivo field is required"]
+    },
+    "nuovo":{
+        "type": "String",
+        "default": false,
+        "required": [true, "nuovo field is required"]
+    },
+    "rete":{
+        "type": "String",
+        "default": false,
+        "required": [true, "rete field is required"]
+    },
+    "agente":{
+        "type": "String",
+        "default": false,
+        "required": [true, "agente field is required"]
+    },
+    "canoneRai":{
+        "type": "String",
+        "default": false,
+        "required": [true, "canoneRai field is required"]
+    }
+}
