@@ -35,7 +35,7 @@ router.get('/customer/filter=:campo::value', function (request, response, next){
             }
             else{
                 debug('Data not present into cache..')
-                // 2. search into db
+                // 2. search in db
                 customer
                 .find()
                 .where(request.params.campo)
@@ -61,25 +61,46 @@ router.get('/customer/filter=:campo::value', function (request, response, next){
 });
 
 router.get('/customer/filter=:campo::value/size=:number', function (request, response, next){
-    var campo = request.params.campo.toString('utf8')
+    var campo = request.params.campo.toString('utf8');
     debug('params in url: ', request.params, ' query: ', request.query);
-
     if(list_fields.includes(campo)){
-        var size = parseInt(request.params.number, 10);
 
-        var query = customer.find()
-        query
-        .where(request.params.campo)
-        .equals(request.params.value)
-        .limit(size)
-        .then((result) => {
-            response.send(result);
-        });
+        // 1. search into cache
+        cache.get(request.originalUrl, (error, value) =>{
+            if(error) debug(error);
+            if(value)
+            {
+                response.send(JSON.parse(value));
+                debug('Data received from cache!');
+            }
+            else{
+                debug('Data not present into cache..')
+                var size = parseInt(request.params.number, 10);
+                // 2. search in db
+                customer
+                .find()
+                .where(request.params.campo)
+                .equals(request.params.value)
+                .limit(size)
+                .then((result) => {
+                    response.send(result);
+
+                    // if status code == 200, then put data into cache.
+                    if(response.statusCode == 200){  
+                        cache.set(request.originalUrl, JSON.stringify(result), (error) =>{
+                            if(error) throw error;
+                            debug('Data received from db, try to put data into cache..')
+                        });
+                    }
+                });
+            }
+        })
     }
     else{
         debug('Not found: ', campo);
         response.sendStatus(404);
     }
+
 });
 
 router.get('/customer/filter=:campo::value/size=:number/sort=:order', function (request, response, next){
