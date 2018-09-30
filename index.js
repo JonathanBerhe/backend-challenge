@@ -1,6 +1,7 @@
-const express = require('express');
-const bodyparser = require('body-parser');
-const mongoose = require('mongoose');
+const express       = require('express');
+const bodyparser    = require('body-parser');
+const mongoose      = require('mongoose');
+const debug         = require('debug') ('INDEX.js')
 
 const app = express();
 
@@ -11,9 +12,8 @@ mongoose.Promise = global.Promise;
 
 app.use(bodyparser.json());
 
-console.log('Import routes')
+debug('Import routes')
 app.use('/api', require('./routes/api'));
-console.log('finish import route')
 
 // error handling
 app.use((err, request, response, next) => {
@@ -21,4 +21,4 @@ app.use((err, request, response, next) => {
 })
 
 const port = process.env.PORT || 4000;
-app.listen(port, () => console.log(`listening on http://localhost:${port}`));
+app.listen(port, () => debug(`listening on http://localhost:${port}`));
