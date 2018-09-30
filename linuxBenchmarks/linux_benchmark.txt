@@ -1,0 +1,15 @@
+
+
+Running 10s test @ http://localhost:4000/api/customer/filter=attivo:SI
+100 connections
+
+Stat    2.5%  50%   97.5% 99%    Avg      Stdev    Max       
+Latency 45 ms 56 ms 94 ms 103 ms 58.75 ms 13.33 ms 163.49 ms 
+
+Stat      1%      2.5%    50%    97.5%   Avg     Stdev  Min     
+Req/Sec   1306    1306    1768   1886    1689.6  195.4  1306    
+Bytes/Sec 3.55 MB 3.55 MB 4.8 MB 5.12 MB 4.59 MB 530 kB 3.54 MB 
+
+Req/Bytes counts sampled once per second.
+
+17k requests in 10s, 45.9 MB read
