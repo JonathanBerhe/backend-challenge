@@ -13,3 +13,47 @@ Bytes/Sec 3.55 MB 3.55 MB 4.8 MB 5.12 MB 4.59 MB 530 kB 3.54 MB
 Req/Bytes counts sampled once per second.
 
 17k requests in 10s, 45.9 MB read
+
+
+developer@developer-VirtualBox:~/repos/backend-challenge$ autocannon -c 100 http://localhost:4000/api/customer/filter=attivo:SI/size=3
+Running 10s test @ http://localhost:4000/api/customer/filter=attivo:SI/size=3
+100 connections
+
+Stat    2.5%  50%   97.5% 99%   Avg     Stdev    Max       
+Latency 40 ms 57 ms 78 ms 83 ms 57.1 ms 14.19 ms 207.31 ms 
+
+Stat      1%      2.5%    50%  97.5%   Avg     Stdev  Min     
+Req/Sec   1521    1521    1729 1859    1742.2  101.31 1521    
+Bytes/Sec 1.76 MB 1.76 MB 2 MB 2.15 MB 2.01 MB 117 kB 1.76 MB 
+
+Req/Bytes counts sampled once per second.
+
+17k requests in 10s, 20.1 MB read
+developer@developer-VirtualBox:~/repos/backend-challenge$ autocannon -c 100 http://localhost:4000/api/customer/filter=attivo:SI/size=1
+Running 10s test @ http://localhost:4000/api/customer/filter=attivo:SI/size=1
+100 connections
+
+Stat    2.5%  50%   97.5% 99%   Avg      Stdev    Max       
+Latency 37 ms 55 ms 74 ms 91 ms 54.72 ms 12.52 ms 193.72 ms 
+
+Stat      1%     2.5%   50%    97.5%  Avg    Stdev   Min    
+Req/Sec   1566   1566   1800   2063   1811.1 126.31  1566   
+Bytes/Sec 838 kB 838 kB 963 kB 1.1 MB 969 kB 67.5 kB 838 kB 
+
+Req/Bytes counts sampled once per second.
+
+18k requests in 10s, 9.69 MB read
+developer@developer-VirtualBox:~/repos/backend-challenge$ autocannon -c 100 http://localhost:4000/api/customer/filter=attivo:SI/size=8
+Running 10s test @ http://localhost:4000/api/customer/filter=attivo:SI/size=8
+100 connections
+
+Stat    2.5%  50%   97.5% 99%    Avg      Stdev    Max       
+Latency 48 ms 64 ms 91 ms 135 ms 66.47 ms 20.49 ms 403.33 ms 
+
+Stat      1%      2.5%    50%     97.5%   Avg     Stdev  Min     
+Req/Sec   1083    1083    1536    1600    1493    149.94 1083    
+Bytes/Sec 2.94 MB 2.94 MB 4.17 MB 4.35 MB 4.05 MB 407 kB 2.94 MB 
+
+Req/Bytes counts sampled once per second.
+
+15k requests in 10s, 40.5 MB read
