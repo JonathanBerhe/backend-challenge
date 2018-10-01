@@ -18,123 +18,81 @@ const cache = redis.createClient();
 debug('Campi riscontrati per customer_model.js: ', list_fields.length);
 
 
-// GET method
-router.get('/customer/filter=:campo::value', function (request, response, next){
-    var campo = request.params.campo.toString('utf8')
+// GET /customer?filter=canoneRai&value=SI&size=3&sort=desc
+router.get('/customer', function (request, response, next){
+    
     debug('params in url: ', request.params, ' query: ', request.query);
 
-    if(list_fields.includes(campo)){
-
-        // 1. search into cache
-        cache.get(request.originalUrl, (error, value) =>{
-            if(error) debug(error);
-            if(value)
-            {
-                response.send(JSON.parse(value));
+    if(Object.keys(request.query).length === 0)
+    {
+        // return all docs from cache
+        cache.get(request.originalUrl, (error, cacheValue) => {
+            if(error) throw error;
+            if(cacheValue){
+                response.send( JSON.parse(cacheValue));
                 debug('Data received from cache!');
             }
-            else{
-                debug('Data not present into cache..')
-                // 2. search in db
-                customer
-                .find()
-                .where(request.params.campo)
-                .equals(request.params.value)
-                .then((result) => {
-                    response.send(result);
+            else
+            {
+                // return all docs from db
+                customer.find().then( (docs) => {
+                    response.send(docs);
 
-                    // if status code == 200, then put data into cache.
-                    if(response.statusCode == 200){  
-                        cache.set(request.originalUrl, JSON.stringify(result), (error) =>{
+                    if(response.statusCode == 200){
+                        // put data into cache
+                        cache.set(request.originalUrl, JSON.stringify(docs), 'EX', 21600, (error) => {
                             if(error) throw error;
                             debug('Data received from db, try to put data into cache..')
-                        });
+                        })
                     }
                 });
             }
         })
     }
-    else{
-        debug('Not found: ', campo);
-        response.sendStatus(404);
-    }
-});
+    else
+    {
+        if( request.query.filter !== null && list_fields.includes(request.query.filter) ){
 
-router.get('/customer/filter=:campo::value/size=:number', function (request, response, next){
-    var campo = request.params.campo.toString('utf8');
-    debug('params in url: ', request.params, ' query: ', request.query);
-    if(list_fields.includes(campo)){
-
-        // 1. search into cache
-        cache.get(request.originalUrl, (error, value) =>{
-            if(error) debug(error);
-            if(value)
-            {
-                response.send(JSON.parse(value));
-                debug('Data received from cache!');
-            }
-            else{
-                debug('Data not present into cache..')
-                var size = parseInt(request.params.number, 10);
-                // 2. search in db
-                customer
-                .find()
-                .where(request.params.campo)
-                .equals(request.params.value)
-                .limit(size)
-                .then((result) => {
-                    response.send(result);
-
-                    // if status code == 200, then put data into cache.
-                    if(response.statusCode == 200){  
-                        cache.set(request.originalUrl, JSON.stringify(result), (error) =>{
-                            if(error) throw error;
-                            debug('Data received from db, try to put data into cache..')
-                        });
-                    }
-                });
-            }
-        })
-    }
-    else{
-        debug('Not found: ', campo);
-        response.sendStatus(404);
-    }
-
-});
-
-router.get('/customer/filter=:campo::value/size=:number/sort=:order', function (request, response, next){
-    var campo = request.params.campo.toString('utf8')
-    debug('params in url: ', request.params, ' query: ', request.query);
-
-    if(list_fields.includes(campo)){
-        var size = parseInt(request.params.number, 10);
-        
-        const sort= function(){
-                switch(request.params.order)
+            // 1. search into cache
+            cache.get(request.originalUrl, (error, cacheValue) => {
+                if(error) debug(error);
+                if(cacheValue)
                 {
-                    case('desc' || -1):
-                        return '-'+campo;
-                    case('asc' || 1):
-                        return campo;
-                    default: return campo;
+                    response.send( JSON.parse(cacheValue) );
+                    debug('Data received from cache!');
                 }
-            }
-        debug('sort obj: ', sort())
+                else
+                {
+                    debug('Data not present into cache..')
 
-        var query = customer.find()
-        query
-        .where(request.params.campo)
-        .equals(request.params.value)
-        .limit(size)
-        .sort(sort())
-        .then((result) => {
-            response.send(result);
-        });
-    }
-    else{
-        debug('Not found: ', campo);
-        response.sendStatus(404);
+                    // 2. search in db
+                    customer.find()
+                    .where(request.query.filter)
+                    .equals( checkFilterValue(request.query.value) )
+                    .limit( checkSize(request.query.size) )
+                    .sort( request.query.sort )
+                    .then((dbValue) => {
+                        response.send(dbValue);
+
+                        // if status code == 200 put data into cache.
+                        if(response.statusCode == 200){  
+
+                            // key: string url, value: json document
+                            cache.set(request.originalUrl, JSON.stringify(dbValue),'EX', 21600 ,  (error) =>{
+                                if(error) throw error;
+                                debug('Data received from db, try to put data into cache..')
+                            });
+                        }
+
+                    });
+                }
+            })
+
+        }
+        else{
+            debug('Not found: ', request.query.filter);
+            response.sendStatus(404);
+        }
     }
 });
 
@@ -146,14 +104,18 @@ router.post('/customer', function(request, response, next){
     }).catch(next);
 });
 
-function searchFromCacheOrDb(request) {
-    // ad cache search
-
-    // query to mongodb
-    customer.find().select(request.params.campo).then((result) => {
-        return result.toString().toLowerCase();
-    });
+function checkFilterValue(value){
+    if(value !== null ){
+        return value;
+    }
 }
+
+function checkSize(querySize){
+    if(querySize !== null){
+        return size = parseInt(querySize, 10);
+    }
+}
+
 
 
 module.exports = router;
