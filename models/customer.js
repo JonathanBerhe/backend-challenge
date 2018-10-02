@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-var json_config = require('./customer_model');
+var json_config = require('./model_customer');
 const schema = mongoose.Schema;
 
 // create customer Schema & model

@@ -1,6 +1,5 @@
 const request=require('request')
 const csv=require('csvtojson')
-const fs = require('fs').createWriteStream('result.txt');
 
 module.exports = class Provider
 {

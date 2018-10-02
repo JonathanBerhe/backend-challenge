@@ -5,7 +5,7 @@ const debug         = require('debug') ('API.js')
 
 // imports models
 const customer = require('../models/customer');
-const customer_util = require('../models/customer_util');
+const customer_util = require('../models/service_customer');
 
 // takes fields from model
 var fields = new customer_util();

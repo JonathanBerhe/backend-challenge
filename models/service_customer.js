@@ -1,4 +1,4 @@
-var json_config = require('./customer_model');
+var json_config = require('./model_customer');
 
 
 module.exports = class CustomerUtil{
