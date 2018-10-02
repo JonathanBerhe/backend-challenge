@@ -13,7 +13,7 @@ var list_fields = [];
 list_fields = fields.getFields();
 
 // Init redis client
-const cache = redis.createClient(); // process.env.REDIS_URL
+const cache = redis.createClient();
 
 debug('Campi riscontrati per customer_model.js: ', list_fields.length);
 
