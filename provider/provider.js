@@ -1,5 +1,6 @@
-const request=require('request')
-const csv=require('csvtojson')
+const request       = require('request')
+const csv           = require('csvtojson')
+const debug         = require('debug') ('PROVIDER')
 
 module.exports = class Provider
 {
@@ -8,7 +9,7 @@ module.exports = class Provider
         this.from_url = from_url;
 
         this.hasResponsOK = null;
-        this.hasCompliteLoadData = null;
+        this.hasCompliteLoadData = false;
 
         this.options = {
             uri: null,
@@ -25,7 +26,9 @@ module.exports = class Provider
         // 1. Get stream data from API.
         request.get(this.from_url, (error, Response) => {
             this._response_handler(error, Response);
+
             if(! this.hasResponsOK) return;
+            
         })
         // Send csv buffer throught a pipe.
         .pipe(
@@ -49,6 +52,7 @@ module.exports = class Provider
             }
             else
             {
+                this.hasCompliteLoadData = true;
                 console.log('Import complited.');
             }
         }))
@@ -59,7 +63,6 @@ module.exports = class Provider
         this.options.body = json;
         request(this.options, (error, response) => {
             this._response_handler(error, response);
-            if(this.hasResponsOK) this.hasCompliteLoadData = true;
         });
     }
 

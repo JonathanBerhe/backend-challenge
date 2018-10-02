@@ -1,14 +1,30 @@
 
-const provider = require('./provider');
+const provider  = require('./provider');
+const debug     = require('debug') ('SERVICE_PROVIDER')
+const env       = require('./enviroment')
 
-var client = new provider('http://challenges.tate.cloud/back2018/CLIENTI');
+debug('Init env: ', env)
+const tateAPI= env.tate_endpoint;
+const appAPI = env.test_endpoint.app_service_endpoint;
+const client = new provider(tateAPI);
 
-try
-{
-    client.updateDb('http://localhost:4000/api/customer');
+debug('Init obj provider')
 
-}catch (error)
-{
-    console.log(error);
-    throw error;
-}
+// 6h
+const time = 3600000 * 6
+
+
+// every x time try to update db
+setInterval( ()=> {
+
+    debug('try to update db.. ')
+    client.updateDb(appAPI);
+    if(! client.hasResponsOK){
+        client.updateDb(appAPI);
+    }else{
+        debug('Db updated!')
+    }
+
+}, time)
+
+console.log(`wait ${time} for sending new data to db...`)

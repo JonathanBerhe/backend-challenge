@@ -6,14 +6,14 @@ const debug         = require('debug') ('INDEX.js')
 const app = express();
 
 // connect to mongodb
-mongoose.connect('mongodb://localhost:27017', {useNewUrlParser: true});
+mongoose.connect(process.env.MONGODB_URI ||'mongodb://localhost:27017', {useNewUrlParser: true});
 mongoose.Promise = global.Promise;
 
 
 app.use(bodyparser.json());
 
-debug('Import routes')
 app.use('/api', require('./routes/api'));
+debug('Import routes')
 
 // error handling
 app.use((err, request, response, next) => {

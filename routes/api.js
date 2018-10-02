@@ -13,7 +13,7 @@ var list_fields = [];
 list_fields = fields.getFields();
 
 // Init redis client
-const cache = redis.createClient();
+const cache = redis.createClient(); // process.env.REDIS_URL
 
 debug('Campi riscontrati per customer_model.js: ', list_fields.length);
 
@@ -21,7 +21,7 @@ debug('Campi riscontrati per customer_model.js: ', list_fields.length);
 // GET /customer?filter=canoneRai&value=SI&size=3&sort=desc
 router.get('/customer', function (request, response, next){
     
-    debug('params in url: ', request.params, ' query: ', request.query);
+    debug('originalUrl: ', request.originalUrl, ', params in url: ', request.params, ', query: ', request.query);
 
     if(Object.keys(request.query).length === 0)
     {
@@ -39,8 +39,8 @@ router.get('/customer', function (request, response, next){
                     response.send(docs);
 
                     if(response.statusCode == 200){
-                        // put data into cache
-                        cache.set(request.originalUrl, JSON.stringify(docs), 'EX', 21600, (error) => {
+                        // put data into cache for 1h
+                        cache.set(request.originalUrl, JSON.stringify(docs), 'EX', 3600000, (error) => {
                             if(error) throw error;
                             debug('Data received from db, try to put data into cache..')
                         })
@@ -78,7 +78,7 @@ router.get('/customer', function (request, response, next){
                         if(response.statusCode == 200){  
 
                             // key: string url, value: json document
-                            cache.set(request.originalUrl, JSON.stringify(dbValue),'EX', 21600 ,  (error) =>{
+                            cache.set(request.originalUrl, JSON.stringify(dbValue),'EX', 3600000 ,  (error) =>{
                                 if(error) throw error;
                                 debug('Data received from db, try to put data into cache..')
                             });

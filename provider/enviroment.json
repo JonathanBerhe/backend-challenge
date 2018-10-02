@@ -1,0 +1,9 @@
+{
+    "tate_endpoint": "http://challenges.tate.cloud/back2018/CLIENTI",
+
+    "test_endpoint":{
+        "app_service_endpoint": "http://localhost:4000/api/customer"
+    },
+
+    "prod_endpoint": "https://tate-backend-challenge.herokuapp.com/api/customer" 
+}
