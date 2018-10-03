@@ -55,7 +55,7 @@ router.get('/customer', function (request, response, next){
 
             // 1. search into cache
             cache.get(request.originalUrl, (error, cacheValue) => {
-                if(error) debug(error);
+                if(error) throw(error);
                 if(cacheValue)
                 {
                     response.send( JSON.parse(cacheValue) );

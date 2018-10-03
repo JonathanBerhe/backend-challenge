@@ -80,8 +80,8 @@ module.exports = class Provider
                 // current line: idUtente: '233'
                 // array Index[idUtente]= 233
                 // key == Index[idUtente]
-                let lowerKey= key.toLowerCase();
-                let newK = lowerKey.replace(/(\_\w)/g, (m) => m[1].toUpperCase());
+                var lowerKey= key.toLowerCase();
+                var newK = lowerKey.replace(/(\_\w)/g, (m) => m[1].toUpperCase());
          
                 //newk = userID
                 //k = user_id
