@@ -177,7 +177,34 @@ Il dato all'interno della cache ha una durata di persistenza definita in fase di
 	    if(error) throw error;
     })
 
+# Start sulla macchina locale
 
 
+Avendo precedentemente installato:
+1.  Node & npm
+2.  Redis Server
+3.  MongoDB 
 
+E' possibile scaricare la repo: 
+
+    root/myfolder  git clone https://github.com/JonathanBerhe/tate-backend-challenge.git
+    
+    ../tate-backend-challenge npm install
+    ../tate-backend-challenge node provider/service_provider.js
+    
+    ../tate-backend-challenge node index.js  
+
+# Deploy su Heroku
+
+Avendo un account su Heroku, creato un progetto e precedentemente installato Heroku cli sulla macchina di sviluppo è possibile:
+
+    root/myfolder  git clone https://github.com/JonathanBerhe/tate-backend-challenge.git
+    
+    ../tate-backend-challenge heroku login
+    ../tate-backend-challenge heroku git: clone -a <nomeprogetto> 
+    ../tate-backend-challenge heroku addons:create heroku-redis:hobby-dev
+    ../tate-backend-challenge heroku addons:create mongolab
+    ../tate-backend-challenge git push heroku master
+			    
+    
 
