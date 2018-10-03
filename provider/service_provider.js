@@ -25,6 +25,6 @@ setInterval( ()=> {
         debug('Db updated!')
     }
 
-}, time)
+}, 30000)
 
 console.log(`wait ${time} for sending new data to db...`)
