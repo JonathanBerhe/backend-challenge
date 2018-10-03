@@ -139,7 +139,7 @@ L' API si basa su [Express](https://expressjs.com/it/) per esporre interfacce HT
 
 
 ### Querying:
-L' url si compone di parametri opzionali, i quali, una volta verificati in input, vengono utilizzare per effettuare le query sul database mediante le interfacce messe a disposizione dalla libreria [mongoose.js](https://mongoosejs.com/).
+L' url si compone di parametri opzionali, i quali, una volta verificati in input, vengono utilizzati per effettuare le query sul database mediante le interfacce messe a disposizione dalla libreria [mongoose.js](https://mongoosejs.com/).
 
     const customer  =  require('../models/customer');
     
